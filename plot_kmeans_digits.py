@@ -98,7 +98,7 @@ pickle.dump(labels_test, open('labels_test.pkl', 'wb'))
 
 sample_size = 300
 
-print 'Kmeans'
+print('Kmeans')
 print("n_digits: %d, \t n_samples %d, \t n_features %d"
       % (n_digits, n_samples, n_features))
 test_kmeans(data, True)
@@ -111,12 +111,12 @@ print
 
 pca = PCA(n_components=2).fit(data)
 reduced_data = pca.transform(data)
-print reduced_data.shape
+print(reduced_data.shape)
 reduced_data_test = pca.transform(data_test)
 pickle.dump(reduced_data, open('reduced_data_train_PCA.pkl', 'wb'))
 pickle.dump(reduced_data_test, open('reduced_data_test_PCA.pkl', 'wb'))
 
-print 'Kmeans on PCA'
+print('Kmeans on PCA')
 print("n_digits: %d, \t n_samples %d, \t n_features %d"
       % (n_digits, n_samples, 2))
 test_kmeans(reduced_data, False)
