@@ -61,7 +61,7 @@ def bench_k_means(estimator, name, data):
                                       metric='euclidean',
                                       sample_size=sample_size)))
 
-def test_kmeans(data, original):
+def test_kmeans(data, original, comp = None):
   print(79 * '-')
   print('% 9s' % 'init'
         '    time  inertia    homo   compl  v-meas     ARI AMI  silhouette')
@@ -75,10 +75,16 @@ def test_kmeans(data, original):
   # in this case the seeding of the centers is deterministic, hence we run the
   # kmeans algorithm only once with n_init=1
   if original:
-    pca = PCA(n_components=n_digits).fit(data)
-    bench_k_means(KMeans(init=pca.components_, n_clusters=n_digits, n_init=1),
-                  name="PCA-based",
-                  data=data)
+    if comp == None:
+      pca = PCA(n_components=n_digits).fit(data)
+      bench_k_means(KMeans(init=pca.components_, n_clusters=n_digits, n_init=1),
+                    name="PCA-based",
+                    data=data)
+    else:
+      pca = PCA(n_components=n_digits).fit(data)
+      bench_k_means(KMeans(init=pca.components_, n_clusters=n_digits, n_init=1),
+                    name="PCA-based",
+                    data=data)
   print(79 * '-')
 
 def twoDVis(estimator, name):
