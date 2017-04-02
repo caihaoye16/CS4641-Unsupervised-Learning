@@ -87,14 +87,25 @@ X = X / 255.0
 n_features = X.shape[1]
 Y = train_df["label"].values
 data, data_test, labels, labels_test = train_test_split(X, Y, test_size = 0.3, random_state = 0) 
+
+with open('data_train.pkl', 'wb') as f:
+  pickle.dump(data, f)
+
+with open('data_test.pkl', 'wb') as f:
+  pickle.dump(data_test, f)
+
+
 n_samples = len(data)
 n_digits = len(np.unique(labels))
 
 # print labels
 
 # pickle.dump(data, open('data.pkl', 'wb'))
-pickle.dump(labels, open('labels_train.pkl', 'wb'))
-pickle.dump(labels_test, open('labels_test.pkl', 'wb'))
+with open('labels_train.pkl', 'wb') as f:
+  pickle.dump(labels, f)
+
+with open('labels_test.pkl', 'wb') as f:
+  pickle.dump(labels_test, f)
 
 sample_size = 300
 
@@ -113,8 +124,12 @@ pca = PCA(n_components=2).fit(data)
 reduced_data = pca.transform(data)
 # print(reduced_data.shape)
 reduced_data_test = pca.transform(data_test)
-pickle.dump(reduced_data, open('reduced_data_train_PCA.pkl', 'wb'))
-pickle.dump(reduced_data_test, open('reduced_data_test_PCA.pkl', 'wb'))
+
+with open('reduced_data_train_PCA.pkl', 'wb') as f:
+  pickle.dump(reduced_data, f)
+
+with open('reduced_data_test_PCA.pkl', 'wb') as f:
+  pickle.dump(reduced_data_test, f)
 
 print('Kmeans on PCA')
 print("n_digits: %d, \t n_samples %d, \t n_features %d"
@@ -132,8 +147,12 @@ new_data = np.hstack((reduced_data, p_labels))
 p_labels_test = kmeans.predict(reduced_data_test)
 p_labels_test = np.expand_dims(p_labels_test, axis=1)
 new_data_test = np.hstack((reduced_data_test, p_labels_test))
-pickle.dump(new_data, open('cluster_feature_train_PCA.pkl', 'wb'))
-pickle.dump(new_data_test, open('cluster_feature_test_PCA.pkl', 'wb'))
+
+with open('PCA_Kmeans_feature_train.pkl', 'wb') as f:
+  pickle.dump(new_data, f)
+
+with open('PCA_Kmeans_feature_test.pkl', 'wb') as f:
+  pickle.dump(new_data_test, f)
 
 # Step size of the mesh. Decrease to increase the quality of the VQ.
 h = .05     # point in the mesh [x_min, x_max]x[y_min, y_max].

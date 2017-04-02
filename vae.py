@@ -10,12 +10,26 @@ from keras.models import Model
 from keras import backend as K
 from keras import metrics
 from keras.datasets import mnist
+import pickle
+import sys
+
+# with open(sys.argv[1], 'rb') as f:
+#     x_train = pickle.load(f)
+
+# with open(sys.argv[2], 'rb') as f:
+#     x_test = pickle.load(f)
+
+# with open(sys.argv[3], 'rb') as f:
+#     y_train = pickle.load(f)
+
+# with open(sys.argv[4], 'rb') as f:
+#     y_test = pickle.load(f)
 
 batch_size = 100
 original_dim = 784
 latent_dim = 2
 intermediate_dim = 256
-epochs = 50
+epochs = 60
 epsilon_std = 1.0
 
 x = Input(batch_shape=(batch_size, original_dim))
@@ -66,11 +80,16 @@ vae.fit(x_train, x_train,
 encoder = Model(x, z_mean)
 
 # display a 2D plot of the digit classes in the latent space
+x_train_encoded = encoder.predict(x_train, batch_size=batch_size)
+with open('data_train_encoded.pkl', 'wb') as f:
+    pickle.dump(x_train_encoded, f)
 x_test_encoded = encoder.predict(x_test, batch_size=batch_size)
+with open('data_test_encoded.pkl', 'wb') as f:
+    pickle.dump(x_test_encoded, f)
 plt.figure(figsize=(6, 6))
 plt.scatter(x_test_encoded[:, 0], x_test_encoded[:, 1], c=y_test)
 plt.colorbar()
-plt.show()
+plt.savefig('latent_var_dis.png')
 
 # build a digit generator that can sample from the learned distribution
 decoder_input = Input(shape=(latent_dim,))
@@ -97,4 +116,4 @@ for i, yi in enumerate(grid_x):
 
 plt.figure(figsize=(10, 10))
 plt.imshow(figure, cmap='Greys_r')
-plt.show()
+plt.savefig('latent_var_vis.png')

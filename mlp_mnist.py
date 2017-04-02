@@ -18,17 +18,24 @@ import pickle
 
 np.set_printoptions(threshold=30)
 
-x_train = pickle.load(open(sys.argv[0], 'rb'))
-x_test = pickle.load(open(sys.argv[1], 'rb'))
+with open(sys.argv[1], 'rb') as f:
+	x_train = pickle.load(f)
 
-y_train = pickle.load(open(sys.argv[2], 'rb'))
-y_test = pickle.load(open(sys.argv[3], 'rb'))
+with open(sys.argv[2], 'rb') as f:
+	x_test = pickle.load(f)
 
-print(x_train, x_test, y_train, y_test)
+with open(sys.argv[3], 'rb') as f:
+	y_train = pickle.load(f)
+
+with open(sys.argv[4], 'rb') as f:
+	y_test = pickle.load(f)
+
+print(x_train.shape, x_test.shape, y_train.shape, y_test.shape)
 
 batch_size = 128
 num_classes = 10
-epochs = 20
+epochs = 100
+input_dim = x_train.shape[1]
 
 # the data, shuffled and split between train and test sets
 # (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -47,7 +54,7 @@ y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
 model = Sequential()
-model.add(Dense(512, activation='relu', input_shape=(784,)))
+model.add(Dense(512, activation='relu', input_shape=(input_dim,)))
 model.add(Dropout(0.2))
 model.add(Dense(512, activation='relu'))
 model.add(Dropout(0.2))
@@ -55,7 +62,7 @@ model.add(Dense(10, activation='softmax'))
 
 model.summary()
 
-tensorboard = TensorBoard(log_dir='./logs', histogram_freq=0, write_graph=True, write_images=True)
+tensorboard = TensorBoard(log_dir='./logs/'+sys.argv[1][:-4]+'/', histogram_freq=0, write_graph=True, write_images=True)
 
 model.compile(loss='categorical_crossentropy',
               optimizer=RMSprop(),
