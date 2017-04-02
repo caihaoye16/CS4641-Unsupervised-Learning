@@ -48,7 +48,7 @@ np.random.seed(42)
 
 def bench_k_means(estimator, name, data):
     t0 = time()
-    print('data size', len(data))
+    # print('data size', len(data))
     estimator.fit(data)
     print('% 9s   %.2fs    %i   %.3f   %.3f   %.3f   %.3f   %.3f    %.3f'
           % (name, (time() - t0), estimator.inertia_,
@@ -81,7 +81,7 @@ def test_kmeans(data, original, comp = None):
                     name="PCA-based",
                     data=data)
     else:
-      pca = PCA(n_components=n_digits).fit(data)
+      pca = PCA(n_components=comp).fit(data)
       bench_k_means(KMeans(init=pca.components_, n_clusters=n_digits, n_init=1),
                     name="PCA-based",
                     data=data)
@@ -259,7 +259,7 @@ n_samples = len(reduced_data)
 print('Kmeans on VAE')
 print("n_digits: %d, \t n_samples %d, \t n_features %d"
       % (n_digits, n_samples,2))
-test_kmeans(reduced_data, True)
+test_kmeans(reduced_data, False)
 
 kmeans = KMeans(init='k-means++', n_clusters=n_digits, n_init=10)
 kmeans.fit(reduced_data)
