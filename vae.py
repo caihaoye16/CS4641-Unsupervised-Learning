@@ -65,6 +65,12 @@ vae.compile(optimizer='rmsprop', loss=vae_loss)
 # train the VAE on MNIST digits
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
+with open('labels_train_VAE.pkl', 'wb') as f:
+    pickle.dump(y_train, f)
+
+with open('labels_test_VAE.pkl', 'wb') as f:
+    pickle.dump(y_test, f)
+
 x_train = x_train.astype('float32') / 255.
 x_test = x_test.astype('float32') / 255.
 x_train = x_train.reshape((len(x_train), np.prod(x_train.shape[1:])))
@@ -81,11 +87,13 @@ encoder = Model(x, z_mean)
 
 # display a 2D plot of the digit classes in the latent space
 x_train_encoded = encoder.predict(x_train, batch_size=batch_size)
-with open('data_train_encoded.pkl', 'wb') as f:
+with open('reduced_data_train_VAE.pkl', 'wb') as f:
     pickle.dump(x_train_encoded, f)
+
 x_test_encoded = encoder.predict(x_test, batch_size=batch_size)
-with open('data_test_encoded.pkl', 'wb') as f:
+with open('reduced_data_test_VAE.pkl', 'wb') as f:
     pickle.dump(x_test_encoded, f)
+
 plt.figure(figsize=(6, 6))
 plt.scatter(x_test_encoded[:, 0], x_test_encoded[:, 1], c=y_test)
 plt.colorbar()
