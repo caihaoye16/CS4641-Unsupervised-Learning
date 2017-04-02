@@ -111,7 +111,7 @@ print
 
 pca = PCA(n_components=2).fit(data)
 reduced_data = pca.transform(data)
-print(reduced_data.shape)
+# print(reduced_data.shape)
 reduced_data_test = pca.transform(data_test)
 pickle.dump(reduced_data, open('reduced_data_train_PCA.pkl', 'wb'))
 pickle.dump(reduced_data_test, open('reduced_data_test_PCA.pkl', 'wb'))
@@ -153,7 +153,7 @@ plt.clf()
 plt.title('PCA-reduced data visualization')
 plt.scatter(reduced_data[:, 0], reduced_data[:, 1], c=labels)
 plt.colorbar()
-plt.show()
+plt.savefig('pca_vis.png')
 plt.clf()
 plt.imshow(Z, interpolation='nearest',
            extent=(xx.min(), xx.max(), yy.min(), yy.max()),
@@ -172,5 +172,5 @@ plt.xlim(x_min, x_max)
 plt.ylim(y_min, y_max)
 plt.xticks(())
 plt.yticks(())
-plt.show()
+plt.savefig('kmeans_pca.png')
 

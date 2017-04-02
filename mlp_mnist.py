@@ -12,7 +12,9 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.optimizers import RMSprop
 from keras.callbacks import TensorBoard
+import numpy as np
 import sys
+import pickle
 
 np.set_printoptions(threshold=30)
 
